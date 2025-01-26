@@ -1,47 +1,34 @@
 import turtle
 
-def koch_snowflake(t, length, level):
-    if level == 0:
-        t.forward(length)
+def koch_curve(t, order, size):
+    if order == 0:
+        t.forward(size)
     else:
-        length /= 3.0
-        koch_snowflake(t, length, level - 1)
-        t.left(60)
-        koch_snowflake(t, length, level - 1)
-        t.right(120)
-        koch_snowflake(t, length, level - 1)
-        t.left(60)
-        koch_snowflake(t, length, level - 1)
+        for angle in [60, -120, 60, 0]:
+            koch_curve(t, order - 1, size / 3)
+            t.left(angle)
 
-
-def draw_snowflake(level):
-    screen = turtle.Screen()
-    screen.setup(width=800, height=800)
-    screen.title("Сніжинка Коха")
-    screen.bgcolor("white")
+def draw_koch_curve(order, size=300):
+    window = turtle.Screen()
+    window.bgcolor("white")
 
     t = turtle.Turtle()
-    t.speed(0)
+    t.speed(0)  
     t.penup()
-    t.goto(-200, 100)
+    t.goto(-size / 2, 0)
     t.pendown()
-    t.color("blue")
 
-    # Малюємо три сторони сніжинки
-    for _ in range(3):
-        koch_snowflake(t, 400, level)
-        t.right(120)
+    koch_curve(t, order, size)
 
-    t.hideturtle()
-    screen.mainloop()
+    window.mainloop()
 
 
 if __name__ == "__main__":
     try:
-        level = int(input("Введіть рівень рекурсії (наприклад, 3): "))
+        level = int(input("Введіть рівень рекурсії: "))
         if level < 0:
             print("Рівень рекурсії має бути невід'ємним числом.")
         else:
-            draw_snowflake(level)
+            draw_koch_curve(level)
     except ValueError:
         print("Будь ласка, введіть ціле число.")
